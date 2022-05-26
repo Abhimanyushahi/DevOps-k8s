@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mail-service
+  labels:
+    app: mail
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: mail
+  type: NodePort
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mail-deploy
+  labels:
+    app: mail
+spec:
+  selector:
+    matchLabels:
+      app: mail
+  template:
+    metadata:
+      labels:
+        app: mail
+    spec:
+      containers:
+      - image: vimal13/mailapp:v1
+        name: mail-con
+        ports:
+        - containerPort: 80
+          name: mail
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: search-service
+  labels:
+    app: search
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: search
+  type: NodePort
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: search-deploy
+  labels:
+    app: search
+spec:
+  selector:
+    matchLabels:
+      app: search
+  template:
+    metadata:
+      labels:
+        app: search
+    spec:
+      containers:
+      - image: vimal13/searchapp:v1
+        name: search-con
+        ports:
+        - containerPort: 80
+          name: search
